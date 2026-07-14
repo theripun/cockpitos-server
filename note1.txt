@@ -1,0 +1,38 @@
+I have everything I need. Here's exactly how to manually remove the Cocktail agent from a VPS, based on what 
+install.sh
+ actually does:
+
+Manually Removing Cocktail from a VPS
+SSH into your VPS and run the following commands:
+
+Step 1 — Stop & disable the systemd service
+bash
+sudo systemctl stop cocktail
+sudo systemctl disable cocktail
+Step 2 — Remove the service file
+bash
+sudo rm -f /etc/systemd/system/cocktail.service
+sudo systemctl daemon-reload
+sudo systemctl reset-failed
+Step 3 — Delete the agent files
+bash
+sudo rm -rf /opt/cocktail
+Step 4 — Delete the config directory
+bash
+sudo rm -rf /etc/cocktail
+Step 5 — (Optional) Verify it's gone
+bash
+systemctl status cocktail
+# Should say: "Unit cocktail.service could not be found."
+ls /opt/cocktail
+# Should say: "No such file or directory"
+That's the full reverse of what 
+install.sh
+ did. The four directories/files it creates are:
+
+What was created	Remove command
+/etc/systemd/system/cocktail.service	rm -f
+/opt/cocktail/ (agent + deps)	rm -rf
+/etc/cocktail/ (config/secrets)	rm -rf
+systemd enable link	systemctl disable
+Note: After removing, the device in Cockpit will go offline (it stops heartbeating). You can then delete it from the Cockpit UI or via the database. You don't need to touch Node.js itself since it was likely already on the server.

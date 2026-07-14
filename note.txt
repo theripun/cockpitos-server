@@ -1,0 +1,98 @@
+# Server
+NODE_ENV=production
+PORT=9100
+TOKEN_PEPPER=production-pepper
+
+# Database
+DATABASE_URL=postgres://reglook:reglook@localhost:5432/cockpit_pro
+
+# CORS
+CORS_ORIGIN=http://localhost:3000
+
+# Session
+SESSION_TTL_SECONDS=604800
+
+# Cookies
+COOKIE_SECURE=false
+COOKIE_SAMESITE=lax
+
+# WebAuthn / Passkeys
+RP_NAME=Cockpit
+RP_ID=localhost
+RP_ORIGIN=http://localhost:3000
+WEBAUTHN_CHALLENGE_TTL_SECONDS=300
+
+# R2 Configuration
+R2_ACCOUNT_ID=
+R2_ACCESS_KEY_ID=
+R2_SECRET_ACCESS_KEY=
+R2_BUCKET=
+
+# Cockpit Config
+COCKPIT_SECRET_KEY=
+
+
+# pnpm run db:clean to clean the database
+# No need to restart the server this time [pnpm run stress-test] ; pnpm run monitor-load
+
+
+
+# Access to server
+ssh -i "C:\Users\ripun\ssh-keys\ripun-ec2.pem" ubuntu@ec2-3-110-60-203.ap-south-1.compute.amazonaws.com
+
+
+
+
+for gallery app in frontend
+
+To set up Cloudflare R2 for your gallery app, you need to configure CORS (Cross-Origin Resource Sharing) on your R2 bucket.
+
+This is required because your 
+gallery.tsx
+ component performs direct file uploads (via PUT requests) and downloads (via GET request signed URLs) from the browser to R2.
+
+1. Configure CORS in Cloudflare R2
+Go to your Cloudflare Dashboard -> R2 -> Select your bucket (cockpit-preview) -> Settings -> CORS Policy.
+
+Add the following policy to allow your local development and production domains to access the bucket directly:
+
+json
+
+[
+  {
+    "AllowedOrigins": [
+      "http://localhost:3000",
+      "https://cockpit.ripun.site",
+      "https://cognode.a2.cockpit.run"
+    ],
+    "AllowedMethods": [
+      "PUT",
+      "GET",
+      "HEAD",
+      "DELETE"
+    ],
+    "AllowedHeaders": [
+      "Content-Type"
+    ],
+    "ExposeHeaders": [
+      "ETag"
+    ],
+    "MaxAgeSeconds": 3000
+  }
+]
+
+
+2. Verify Server Environment Variables
+I checked your 
+server/.env
+ file, and your R2 credentials appear to be already set up:
+
+R2_ACCOUNT_ID: Set
+R2_ACCESS_KEY_ID: Set
+R2_SECRET_ACCESS_KEY: Set
+R2_BUCKET: Set to cockpit-preview
+3. Summary of Flow
+Upload: The frontend requests a "signed URL" from your server.
+Direct Transfer: The browser uses this URL to PUT the file directly to R2 (this is why CORS is needed).
+Download: The frontend requests a signed URL to GET the image for previewing.
+Note: You do not need to enable "Public Access" for the bucket since you are using signed URLs, which securely grant temporary access to private objects.

@@ -1,0 +1,1935 @@
+{
+    "info": {
+        "name": "COCKPIT-OS API",
+        "description": "API collection for COCKPIT-OS server",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Health",
+            "item": [
+                {
+                    "name": "Health Check",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                ""
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Get CSRF Token",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/auth/csrf",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "csrf"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Signup Start",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"user@example.com\",\n  \"username\": \"username\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/auth/signup/start",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "signup",
+                                "start"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Signup Verify",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"userId\": \"uuid\",\n  \"otp\": \"123456\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/auth/signup/verify",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "signup",
+                                "verify"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Signup Password",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"userId\": \"uuid\",\n  \"password\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/auth/signup/password",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "signup",
+                                "password"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Login Password",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"username\",\n  \"password\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/auth/login/password",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "login",
+                                "password"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/auth/logout",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "logout"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Current User",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/auth/me",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "me"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Dev Login (Backdoor)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"userId\": \"97cdf7ec-490d-4da9-b4d5-2bfbd88f22e0\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/auth/dev/login",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "dev",
+                                "login"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Users",
+            "item": [
+                {
+                    "name": "Get Profile",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/users/me",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "users",
+                                "me"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Profile",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/users/me",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "users",
+                                "me"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Passkeys",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/users/me/passkeys",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "users",
+                                "me",
+                                "passkeys"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Start Passkey Registration",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/users/me/passkeys/start",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "users",
+                                "me",
+                                "passkeys",
+                                "start"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Finish Passkey Registration",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"data\": {}\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/users/me/passkeys/finish",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "users",
+                                "me",
+                                "passkeys",
+                                "finish"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Passkey",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/users/me/passkeys/:id",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "users",
+                                "me",
+                                "passkeys",
+                                ":id"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "passkey_id"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Cockpit",
+            "item": [
+                {
+                    "name": "Create VPS",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"My VPS\",\n  \"host\": \"127.0.0.1\",\n  \"port\": 22,\n  \"username\": \"root\",\n  \"authType\": \"password\",\n  \"password\": \"secret\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/cockpit/vps",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "cockpit",
+                                "vps"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "List VPS",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/cockpit/vps",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "cockpit",
+                                "vps"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get VPS Details",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/cockpit/vps/:id",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "cockpit",
+                                "vps",
+                                ":id"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "vps_id"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update VPS",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"New Name\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/cockpit/vps/:id",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "cockpit",
+                                "vps",
+                                ":id"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "vps_id"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete VPS",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/cockpit/vps/:id",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "cockpit",
+                                "vps",
+                                ":id"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "vps_id"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Verify VPS SSH",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/cockpit/vps/:id/verify",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "cockpit",
+                                "vps",
+                                ":id",
+                                "verify"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "vps_id"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Accept Host Key",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"fingerprint\": \"ssh-rsa ...\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/cockpit/vps/:id/hostkey/accept",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "cockpit",
+                                "vps",
+                                ":id",
+                                "hostkey",
+                                "accept"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "vps_id"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Notes",
+                    "item": [
+                        {
+                            "name": "Create Note",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"title\": \"My Note\",\n  \"content\": \"Note content\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/notes",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "notes"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "List Notes",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/notes",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "notes"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Update Note",
+                            "request": {
+                                "method": "PATCH",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"content\": \"Updated content\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/notes/:id",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "notes",
+                                        ":id"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "id",
+                                            "value": "note_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Delete Note",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/notes/:id",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "notes",
+                                        ":id"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "id",
+                                            "value": "note_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Speedtest",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/cockpit/speedtest?size=102400",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "cockpit",
+                                "speedtest"
+                            ],
+                            "query": [
+                                {
+                                    "key": "size",
+                                    "value": "102400"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "System Boost",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/cockpit/system/boost",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "cockpit",
+                                "system",
+                                "boost"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Terminal",
+                    "item": [
+                        {
+                            "name": "Create Session",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/vps/:vpsId/terminal/sessions",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "vps",
+                                        ":vpsId",
+                                        "terminal",
+                                        "sessions"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "vpsId",
+                                            "value": "vps_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Close Session",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/vps/:vpsId/terminal/sessions/:sessionId/close",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "vps",
+                                        ":vpsId",
+                                        "terminal",
+                                        "sessions",
+                                        ":sessionId",
+                                        "close"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "vpsId",
+                                            "value": "vps_id"
+                                        },
+                                        {
+                                            "key": "sessionId",
+                                            "value": "session_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Wallpaper",
+                    "item": [
+                        {
+                            "name": "Get Wallpaper",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/wallpaper",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "wallpaper"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Update Wallpaper",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"wallpaperId\": 1\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/wallpaper",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "wallpaper"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Cocktail",
+            "item": [
+                {
+                    "name": "Agent (Fast)",
+                    "item": [
+                        {
+                            "name": "Lease Task",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"deviceId\": \"uuid\",\n  \"token\": \"token\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/lease-task",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "lease-task"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Complete Task",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"taskId\": \"uuid\",\n  \"result\": {},\n  \"deviceId\": \"uuid\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/complete-task",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "complete-task"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Report Metrics",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"deviceId\": \"uuid\",\n  \"token\": \"token\",\n  \"metrics\": {}\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/report-metrics",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "report-metrics"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Task Progress",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"taskId\": \"uuid\",\n  \"progressPct\": 50\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/task-progress",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "task-progress"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Device Management",
+                    "item": [
+                        {
+                            "name": "Start Enrollment",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"vpsId\": \"uuid\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/devices/enroll/start",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "devices",
+                                        "enroll",
+                                        "start"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "List Devices",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/devices",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "devices"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Device",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/devices/:deviceId",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "devices",
+                                        ":deviceId"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "deviceId",
+                                            "value": "device_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Disable Device",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/devices/:deviceId/disable",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "devices",
+                                        ":deviceId",
+                                        "disable"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "deviceId",
+                                            "value": "device_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Device Tasks",
+                    "item": [
+                        {
+                            "name": "Create Task",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"type\": \"command\",\n  \"payload\": { \"cmd\": \"ls -la\" }\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/devices/:deviceId/tasks",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "devices",
+                                        ":deviceId",
+                                        "tasks"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "deviceId",
+                                            "value": "device_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "List Tasks",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/devices/:deviceId/tasks?limit=50",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "devices",
+                                        ":deviceId",
+                                        "tasks"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "limit",
+                                            "value": "50"
+                                        }
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "deviceId",
+                                            "value": "device_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Device Metrics & Procs",
+                    "item": [
+                        {
+                            "name": "Latest Metrics",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/devices/:deviceId/metrics/latest",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "devices",
+                                        ":deviceId",
+                                        "metrics",
+                                        "latest"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "deviceId",
+                                            "value": "device_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "List Processes",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"limit\": 50,\n  \"sort\": \"cpu\",\n  \"descending\": true\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/devices/:deviceId/proc/list",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "devices",
+                                        ":deviceId",
+                                        "proc",
+                                        "list"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "deviceId",
+                                            "value": "device_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Kill Process",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"pid\": 1234,\n  \"signal\": \"SIGTERM\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/devices/:deviceId/proc/kill",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "devices",
+                                        ":deviceId",
+                                        "proc",
+                                        "kill"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "deviceId",
+                                            "value": "device_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Run Booster",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"actions\": [\"clear_cache\"]\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/devices/:deviceId/boost/run",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "devices",
+                                        ":deviceId",
+                                        "boost",
+                                        "run"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "deviceId",
+                                            "value": "device_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "File System (Cocktail FS)",
+                    "item": [
+                        {
+                            "name": "List Dir",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"path\": \"/\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cocktail-fs/:deviceId/list",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cocktail-fs",
+                                        ":deviceId",
+                                        "list"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "deviceId",
+                                            "value": "device_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "List Dir (GET)",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/cocktail-fs/:deviceId/list?path=/",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cocktail-fs",
+                                        ":deviceId",
+                                        "list"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "path",
+                                            "value": "/"
+                                        }
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "deviceId",
+                                            "value": "device_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Stat",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"path\": \"/tmp/test\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cocktail-fs/:deviceId/stat",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cocktail-fs",
+                                        ":deviceId",
+                                        "stat"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "deviceId",
+                                            "value": "device_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Read Text",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"path\": \"/tmp/test.txt\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cocktail-fs/:deviceId/read-text",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cocktail-fs",
+                                        ":deviceId",
+                                        "read-text"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "deviceId",
+                                            "value": "device_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Write Text",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"path\": \"/tmp/test.txt\",\n  \"content\": \"Hello world\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cocktail-fs/:deviceId/write-text",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cocktail-fs",
+                                        ":deviceId",
+                                        "write-text"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "deviceId",
+                                            "value": "device_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Make Dir",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"path\": \"/tmp/new_dir\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cocktail-fs/:deviceId/mkdir",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cocktail-fs",
+                                        ":deviceId",
+                                        "mkdir"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "deviceId",
+                                            "value": "device_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Delete",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"path\": \"/tmp/file_to_del\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cocktail-fs/:deviceId/delete",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cocktail-fs",
+                                        ":deviceId",
+                                        "delete"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "deviceId",
+                                            "value": "device_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Move",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"from\": \"/tmp/a\",\n  \"to\": \"/tmp/b\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cocktail-fs/:deviceId/move",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cocktail-fs",
+                                        ":deviceId",
+                                        "move"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "deviceId",
+                                            "value": "device_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Search",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"root\": \"/var/log\",\n  \"query\": \"*.log\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cocktail-fs/:deviceId/search",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cocktail-fs",
+                                        ":deviceId",
+                                        "search"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "deviceId",
+                                            "value": "device_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Transfers & Uploads",
+                    "item": [
+                        {
+                            "name": "Init Upload (Browser->Server)",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"deviceId\": \"uuid\",\n  \"path\": \"/tmp/upload\",\n  \"sizeBytes\": 1024\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/transfers/upload/init",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "transfers",
+                                        "upload",
+                                        "init"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Init Download (VPS->Browser)",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"deviceId\": \"uuid\",\n  \"path\": \"/tmp/file\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/transfers/download/init",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "transfers",
+                                        "download",
+                                        "init"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Init R2 Upload",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"filename\": \"file.txt\",\n  \"sizeBytes\": 1024,\n  \"destPath\": \"/tmp/dest\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/vps/:vpsId/uploads/init",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "vps",
+                                        ":vpsId",
+                                        "uploads",
+                                        "init"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "vpsId",
+                                            "value": "vps_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Complete R2 Upload",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"sha256\": \"hash\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/vps/:vpsId/uploads/:uploadId/complete",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "vps",
+                                        ":vpsId",
+                                        "uploads",
+                                        ":uploadId",
+                                        "complete"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "vpsId",
+                                            "value": "vps_id"
+                                        },
+                                        {
+                                            "key": "uploadId",
+                                            "value": "upload_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Upload Status",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/vps/:vpsId/uploads/:uploadId",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "vps",
+                                        ":vpsId",
+                                        "uploads",
+                                        ":uploadId"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "vpsId",
+                                            "value": "vps_id"
+                                        },
+                                        {
+                                            "key": "uploadId",
+                                            "value": "upload_id"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Agent Device API",
+                    "item": [
+                        {
+                            "name": "Finish Enrollment",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/device/enroll/finish",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "device",
+                                        "enroll",
+                                        "finish"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Device Heartbeat",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "x-device-id",
+                                        "value": "uuid"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/device/heartbeat",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "device",
+                                        "heartbeat"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Poll Tasks",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "x-device-id",
+                                        "value": "uuid"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"maxTasks\": 1\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/cockpit/cocktail/device/tasks/poll",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "cockpit",
+                                        "cocktail",
+                                        "device",
+                                        "tasks",
+                                        "poll"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Activity",
+            "item": [
+                {
+                    "name": "Heartbeat",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"page\": \"home\",\n  \"latitude\": 26.1144,\n  \"longitude\": 91.7266,\n  \"accuracy\": 10\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/activity/heartbeat",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "activity",
+                                "heartbeat"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Admin",
+                    "item": [
+                        {
+                            "name": "Get Users Activity",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/admin/activity/users",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "admin",
+                                        "activity",
+                                        "users"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get User Daily Activity",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/admin/activity/users/:userId/daily",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "admin",
+                                        "activity",
+                                        "users",
+                                        ":userId",
+                                        "daily"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "userId",
+                                            "value": ""
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get User Location History",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/admin/activity/users/:userId/locations",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "admin",
+                                        "activity",
+                                        "users",
+                                        ":userId",
+                                        "locations"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "userId",
+                                            "value": ""
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get User IP Logs",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/admin/activity/users/:userId/ip-logs",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "admin",
+                                        "activity",
+                                        "users",
+                                        ":userId",
+                                        "ip-logs"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "userId",
+                                            "value": ""
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:3000",
+            "type": "string"
+        }
+    ]
+}
