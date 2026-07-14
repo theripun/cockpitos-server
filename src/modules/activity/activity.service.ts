@@ -3,8 +3,14 @@ import { eq, and, desc, sql, isNull } from 'drizzle-orm';
 import { DrizzleService } from '../../db/drizzle/drizzle.service';
 import { userActivityDaily, userLocationLogs, userIpLogs, users, userSessions, auditLogs } from '../../db/drizzle/schema';
 import { format } from 'date-fns';
-import * as geoip from 'geoip-lite';
 import { UAParser } from 'ua-parser-js';
+
+let geoip: typeof import('geoip-lite') | undefined;
+
+function lookupGeoIp(ipAddress: string) {
+    geoip ??= require('geoip-lite') as typeof import('geoip-lite');
+    return geoip.lookup(ipAddress);
+}
 
 @Injectable()
 export class ActivityService {
@@ -48,7 +54,7 @@ export class ActivityService {
         let city = null;
         let country = null;
         if (ipAddress && ipAddress !== '127.0.0.1' && ipAddress !== '::1') {
-            const geo = geoip.lookup(ipAddress);
+            const geo = lookupGeoIp(ipAddress);
             if (geo) {
                 city = geo.city;
                 country = geo.country;

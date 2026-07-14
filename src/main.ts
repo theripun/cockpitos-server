@@ -23,7 +23,7 @@ async function bootstrap() {
     app.set('trust proxy', 1);
 
     const configService = app.get(ConfigService);
-    const port = configService.get<number>('PORT', 9100);
+    const port = Number(process.env.PORT) || 3000;
     const corsOrigin = configService.get<string>('CORS_ORIGIN', 'https://cockpit.ripun.site,https://cockpit.run');
     const allowedOrigins = corsOrigin.split(',').map(o => o.trim());
     const cookieSecure = configService.get<boolean | string>('COOKIE_SECURE', true);
@@ -96,7 +96,7 @@ async function bootstrap() {
     // WebSocket adapter
     app.useWebSocketAdapter(new WsAdapter(app));
 
-    await app.listen(port);
+    await app.listen(port, '0.0.0.0');
 
     console.log(`🚀 Server running on port ${port}`);
 }
