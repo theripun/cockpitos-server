@@ -52,30 +52,12 @@ const oauthSchema = z.object({
     GITHUB_CALLBACK_URL: z.string().url().optional(),
 });
 
-const isLoopbackDatabaseUrl = (value: string): boolean => {
-    try {
-        const { hostname } = new URL(value);
-        return ['localhost', '127.0.0.1', '::1', '[::1]'].includes(hostname);
-    } catch {
-        return false;
-    }
-};
-
 // Combine schemas
 export const envSchema = baseSchema
     .merge(storageSchema)
     .merge(cockpitSchema)
     .merge(mailSchema)
-    .merge(oauthSchema)
-    .superRefine((env, ctx) => {
-        if (env.NODE_ENV === 'production' && isLoopbackDatabaseUrl(env.DATABASE_URL)) {
-            ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                path: ['DATABASE_URL'],
-                message: 'DATABASE_URL must point to the production PostgreSQL host in production; localhost/127.0.0.1 will fail on Render.',
-            });
-        }
-    });
+    .merge(oauthSchema);
 
 export type Env = z.infer<typeof envSchema>;
 
