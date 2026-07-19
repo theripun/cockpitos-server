@@ -13,14 +13,9 @@ import { MailModule } from './modules/mail/mail.module';
 
 import { CalendarModule } from './modules/calendar/calendar.module';
 import { ActivityModule } from './modules/activity/activity.module';
-import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
     imports: [
-        ThrottlerModule.forRoot([{
-            ttl: 60000,
-            limit: 10,
-        }]),
         // Core modules
         ConfigModule,
         LoggingModule,
