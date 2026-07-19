@@ -24,7 +24,7 @@ async function bootstrap() {
 
     const configService = app.get(ConfigService);
     const port = Number(process.env.PORT) || 3000;
-    const corsOrigin = configService.get<string>('CORS_ORIGIN', 'https://cockpit.ripun.site,https://cockpit.run');
+    const corsOrigin = configService.get<string>('CORS_ORIGIN', 'https://api.cockpit.run,https://cockpit.run');
     const allowedOrigins = corsOrigin.split(',').map(o => o.trim());
     const cookieSecure = configService.get<boolean | string>('COOKIE_SECURE', true);
     const sessionCookieSecure = cookieSecure === true || cookieSecure === 'true';
