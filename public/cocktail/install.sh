@@ -93,15 +93,25 @@ elif command -v zypper >/dev/null; then
     NODE_INSTALL="sudo zypper install -y nodejs"
 fi
 
-wait_for_apt
-if [ -n "$UPDATE_CMD" ]; then
-    echo "  - refreshing package metadata"
-    eval "$UPDATE_CMD" || echo "    package metadata refresh failed, continuing"
+if ! command -v curl >/dev/null || ! command -v ip >/dev/null; then
+    wait_for_apt
+    if [ -n "$UPDATE_CMD" ]; then
+        echo "  - refreshing package metadata"
+        eval "$UPDATE_CMD" || echo "    package metadata refresh failed, continuing"
+    fi
+    if [ -n "$INSTALL_CMD" ]; then
+        run_optional "installing curl and iproute2" $INSTALL_CMD curl iproute2 || true
+    fi
+else
+    echo "  - required tools already available"
 fi
-if [ -n "$INSTALL_CMD" ]; then
-    run_optional "installing curl and iproute2" $INSTALL_CMD curl iproute2 || true
-    # Try multiple fetch alternatives in order of preference
-    run_optional "installing system info helper" $INSTALL_CMD fastfetch || run_optional "installing system info helper fallback" $INSTALL_CMD screenfetch || run_optional "installing system info helper fallback" $INSTALL_CMD neofetch || true
+
+if ! command -v fastfetch >/dev/null && ! command -v screenfetch >/dev/null && ! command -v neofetch >/dev/null && [ -n "$INSTALL_CMD" ]; then
+    if sudo fuser /var/lib/dpkg/lock-frontend /var/lib/dpkg/lock /var/lib/apt/lists/lock /var/cache/apt/archives/lock >/dev/null 2>&1; then
+        echo "  - apt/dpkg busy; skipping optional system info helper"
+    else
+        run_optional "installing system info helper" $INSTALL_CMD fastfetch || run_optional "installing system info helper fallback" $INSTALL_CMD screenfetch || run_optional "installing system info helper fallback" $INSTALL_CMD neofetch || true
+    fi
 fi
 
 # 1. Detect OS and Arch
@@ -116,6 +126,7 @@ fi
 # Ensure Node.js is installed
 if ! command -v node >/dev/null; then
   echo "Installing Node.js..."
+  wait_for_apt
   eval "$NODE_INSTALL"
 fi
 
