@@ -12,6 +12,22 @@ import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './platform/http/filters/all-exceptions.filter';
 import { ConfigService } from '@nestjs/config';
 
+const DEFAULT_CORS_ORIGIN = 'http://localhost:3000,https://api.cockpit.run,https://cockpit.run,https://www.cockpit.run';
+
+function buildAllowedOrigins(corsOrigin: string): string[] {
+    const origins = new Set(corsOrigin.split(',').map(o => o.trim()).filter(Boolean));
+
+    if (origins.has('https://cockpit.run')) {
+        origins.add('https://www.cockpit.run');
+    }
+
+    if (origins.has('https://www.cockpit.run')) {
+        origins.add('https://cockpit.run');
+    }
+
+    return [...origins];
+}
+
 async function bootstrap() {
     console.log(`Starting bootstrap... [${new Date().toISOString()}]`);
 
@@ -24,8 +40,8 @@ async function bootstrap() {
 
     const configService = app.get(ConfigService);
     const port = Number(process.env.PORT) || 3000;
-    const corsOrigin = configService.get<string>('CORS_ORIGIN', 'https://api.cockpit.run,https://cockpit.run');
-    const allowedOrigins = corsOrigin.split(',').map(o => o.trim());
+    const corsOrigin = configService.get<string>('CORS_ORIGIN', DEFAULT_CORS_ORIGIN);
+    const allowedOrigins = buildAllowedOrigins(corsOrigin);
     const cookieSecure = configService.get<boolean | string>('COOKIE_SECURE', true);
     const sessionCookieSecure = cookieSecure === true || cookieSecure === 'true';
     const sessionCookieSameSite = configService.get<'lax' | 'strict' | 'none'>('COOKIE_SAMESITE', 'lax');

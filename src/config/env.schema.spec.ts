@@ -34,4 +34,16 @@ describe('envSchema', () => {
             expect(result.error.flatten().fieldErrors.DATABASE_URL).toBeDefined();
         }
     });
+
+    it('includes the www production frontend in the default CORS origins', () => {
+        const result = envSchema.safeParse({
+            ...validEnv,
+            CORS_ORIGIN: undefined,
+        });
+
+        expect(result.success).toBe(true);
+        if (result.success) {
+            expect(result.data.CORS_ORIGIN.split(',')).toContain('https://www.cockpit.run');
+        }
+    });
 });

@@ -7,7 +7,7 @@ const baseSchema = z.object({
     DATABASE_URL: z.string().url(),
     API_PUBLIC_URL: z.string().url().optional(),
     FRONTEND_URL: z.string().url().optional(),
-    CORS_ORIGIN: z.string().default('http://localhost:3000,https://api.cockpit.run,https://cockpit.run'), // Can be comma-separated list
+    CORS_ORIGIN: z.string().default('http://localhost:3000,https://api.cockpit.run,https://cockpit.run,https://www.cockpit.run'), // Can be comma-separated list
     SESSION_TTL_SECONDS: z.string().transform(Number).default('604800'),
     COOKIE_SECURE: z.string().transform((val) => val === 'true').default('true'), // Default true for prod
     COOKIE_SAMESITE: z.enum(['lax', 'strict', 'none']).default('lax'),
