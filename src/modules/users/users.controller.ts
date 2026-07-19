@@ -69,6 +69,13 @@ export class UsersController {
             role: user.role,
             marketingOptIn: user.marketingOptIn,
             wallpaperId: user.wallpaperId || 11,
+            plan: user.plan,
+            planName: user.planName,
+            subscriptionPlan: user.subscriptionPlan,
+            subscriptionStatus: user.subscriptionStatus,
+            planStatus: user.planStatus,
+            subscriptionEndsAt: user.subscriptionEndsAt,
+            subscriptionSource: user.subscriptionSource,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
         };
@@ -79,10 +86,10 @@ export class UsersController {
     @ApiOperation({ summary: 'Update current user profile' })
     @ApiResponse({ status: 200, description: 'Updated user profile' })
     async updateMe(
-        @CurrentUser('id') userId: string,
+        @CurrentUser() user: RequestUser,
         @Body() dto: UpdateMeDto,
     ) {
-        const updated = await this.usersService.updateUser(userId, dto);
+        const updated = await this.usersService.updateUser(user.id, dto);
         return {
             id: updated.id,
             email: updated.email,
@@ -92,8 +99,34 @@ export class UsersController {
             role: updated.role,
             marketingOptIn: updated.marketingOptIn,
             wallpaperId: updated.wallpaperId,
+            plan: user.plan,
+            planName: user.planName,
+            subscriptionPlan: user.subscriptionPlan,
+            subscriptionStatus: user.subscriptionStatus,
+            planStatus: user.planStatus,
+            subscriptionEndsAt: user.subscriptionEndsAt,
+            subscriptionSource: user.subscriptionSource,
             createdAt: updated.createdAt,
             updatedAt: updated.updatedAt,
+        };
+    }
+
+    @Post('me/subscription/pro-offer')
+    @UseGuards(CsrfGuard)
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Activate developer-granted Pro offer for current user' })
+    @ApiResponse({ status: 200, description: 'Pro offer activated' })
+    async activateDeveloperProOffer(@CurrentUser('id') userId: string) {
+        const subscription = await this.usersService.activateDeveloperProOffer(userId);
+        return {
+            ok: true,
+            plan: subscription.plan,
+            planName: 'Pro Plan',
+            subscriptionPlan: subscription.plan,
+            subscriptionStatus: subscription.status,
+            planStatus: subscription.status,
+            subscriptionEndsAt: subscription.endsAt,
+            subscriptionSource: subscription.source,
         };
     }
 

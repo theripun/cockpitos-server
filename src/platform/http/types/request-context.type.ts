@@ -9,6 +9,13 @@ export interface RequestUser {
     role: string;
     marketingOptIn: boolean;
     wallpaperId?: number;
+    plan?: string;
+    planName?: string;
+    subscriptionPlan?: string;
+    subscriptionStatus?: string;
+    planStatus?: string;
+    subscriptionEndsAt?: Date | null;
+    subscriptionSource?: string;
     createdAt: Date;
     updatedAt: Date;
 }

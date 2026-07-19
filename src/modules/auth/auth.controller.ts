@@ -192,6 +192,13 @@ export class AuthController {
             lastName: user.lastName,
             role: user.role,
             marketingOptIn: user.marketingOptIn,
+            plan: user.plan,
+            planName: user.planName,
+            subscriptionPlan: user.subscriptionPlan,
+            subscriptionStatus: user.subscriptionStatus,
+            planStatus: user.planStatus,
+            subscriptionEndsAt: user.subscriptionEndsAt,
+            subscriptionSource: user.subscriptionSource,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
         };
@@ -325,4 +332,3 @@ export class AuthController {
         }
     }
 }
-

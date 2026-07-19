@@ -1,5 +1,6 @@
 export * from './users';
 export * from './sessions';
+export * from './user_subscriptions';
 export * from './passkeys';
 export * from './webauthn_challenges';
 

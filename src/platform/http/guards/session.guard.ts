@@ -4,9 +4,9 @@ import {
     ExecutionContext,
     UnauthorizedException,
 } from '@nestjs/common';
-import { eq, and, isNull, gt } from 'drizzle-orm';
+import { eq, and, isNull, gt, or } from 'drizzle-orm';
 import { DrizzleService } from '../../../db/drizzle/drizzle.service';
-import { sessions, users } from '@/db/drizzle/schema';
+import { sessions, userSubscriptions, users } from '@/db/drizzle/schema';
 import { COOKIE_NAMES } from '../../security/cookies/cookie.constants';
 import { ErrorCodes } from '../../../common/constants/error-codes';
 import { RequestWithUser } from '../types/request-context.type';
@@ -75,19 +75,33 @@ export class SessionGuard implements CanActivate {
             });
         }
 
-        // Get user
-        const [user] = await db
-            .select()
+        // Get user and current subscription, if one exists.
+        const [record] = await db
+            .select({
+                user: users,
+                subscription: userSubscriptions,
+            })
             .from(users)
+            .leftJoin(
+                userSubscriptions,
+                and(
+                    eq(userSubscriptions.userId, users.id),
+                    eq(userSubscriptions.status, 'active'),
+                    or(isNull(userSubscriptions.endsAt), gt(userSubscriptions.endsAt, now)),
+                ),
+            )
             .where(eq(users.id, session.userId))
             .limit(1);
 
+        const user = record?.user;
         if (!user) {
             throw new UnauthorizedException({
                 code: ErrorCodes.USER_NOT_FOUND,
                 message: 'User not found',
             });
         }
+
+        const subscription = record.subscription;
 
         // Attach user to request
         request.user = {
@@ -98,6 +112,14 @@ export class SessionGuard implements CanActivate {
             lastName: user.lastName,
             role: user.role,
             marketingOptIn: user.marketingOptIn,
+            wallpaperId: user.wallpaperId ?? undefined,
+            plan: subscription?.plan ?? 'free',
+            planName: subscription?.plan === 'pro' ? 'Pro Plan' : 'Free Plan',
+            subscriptionPlan: subscription?.plan ?? 'free',
+            subscriptionStatus: subscription?.status ?? 'free',
+            planStatus: subscription?.status ?? 'free',
+            subscriptionEndsAt: subscription?.endsAt ?? null,
+            subscriptionSource: subscription?.source,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
         };

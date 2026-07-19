@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { DrizzleService } from '../../db/drizzle/drizzle.service';
-import { users, User, cocktailDevices } from '@/db/drizzle/schema';
+import { userSubscriptions, users, User, cocktailDevices } from '@/db/drizzle/schema';
 import { ErrorCodes } from '../../common/constants/error-codes';
 import { UpdateMeDto } from './dto/update-me.dto';
 
@@ -99,5 +99,40 @@ export class UsersService {
         }
 
         return updated;
+    }
+
+    async activateDeveloperProOffer(userId: string) {
+        const db = this.drizzle.db;
+        const now = new Date();
+        const oneYearFromNow = new Date(now);
+        oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
+
+        const [subscription] = await db
+            .insert(userSubscriptions)
+            .values({
+                userId,
+                plan: 'pro',
+                status: 'active',
+                source: 'developer_grant',
+                startsAt: now,
+                endsAt: oneYearFromNow,
+                canceledAt: null,
+                updatedAt: now,
+            })
+            .onConflictDoUpdate({
+                target: userSubscriptions.userId,
+                set: {
+                    plan: 'pro',
+                    status: 'active',
+                    source: 'developer_grant',
+                    startsAt: now,
+                    endsAt: oneYearFromNow,
+                    canceledAt: null,
+                    updatedAt: now,
+                },
+            })
+            .returning();
+
+        return subscription;
     }
 }

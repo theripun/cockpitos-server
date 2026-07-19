@@ -153,9 +153,11 @@ ssh root@YOUR_VPS_IP
     - `PORT=9100`
     - `API_PUBLIC_URL=https://cognode.a2.cockpit.run`
     - `CORS_ORIGIN=https://cockpit.ripun.site`
-    - `DATABASE_URL=...` (Your production DB URL)
+    - `DATABASE_URL=...` (Your production PostgreSQL URL; on Render, use the PostgreSQL service's Internal Database URL when the API and database are in the same region)
     - `SMTP_HOST=smtppro.zoho.in`
     - ...other keys...
+
+    Do not use a `localhost`, `127.0.0.1`, or `::1` database URL in production. On Render, `localhost:5432` points back at the web service container, not your managed PostgreSQL database.
 
 4.  **Build the Server**
     ```bash
