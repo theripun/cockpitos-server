@@ -29,17 +29,48 @@ echo "Ensuring dependencies..."
 INSTALL_CMD=""
 UPDATE_CMD=""
 FETCH_PKG="fastfetch"
+export DEBIAN_FRONTEND=noninteractive
+
+run_optional() {
+    local label="$1"
+    shift
+    echo "  - $label"
+    if "$@"; then
+        echo "    ok"
+        return 0
+    else
+        echo "    skipped or failed, continuing"
+        return 1
+    fi
+}
+
+wait_for_apt() {
+    if ! command -v apt-get >/dev/null; then
+        return 0
+    fi
+
+    local waited=0
+    while pgrep -x apt >/dev/null 2>&1 || pgrep -x apt-get >/dev/null 2>&1 || pgrep -x dpkg >/dev/null 2>&1 || pgrep -x unattended-upgr >/dev/null 2>&1; do
+        if [ "$waited" -ge 180 ]; then
+            echo "  - apt/dpkg still locked after 180s; continuing and letting apt report the exact error"
+            return 0
+        fi
+        echo "  - waiting for apt/dpkg lock... ${waited}s"
+        sleep 5
+        waited=$((waited + 5))
+    done
+}
 
 if command -v apt-get >/dev/null; then
-    INSTALL_CMD="sudo apt-get install -y -qq"
-    UPDATE_CMD="sudo apt-get update -qq"
-    NODE_INSTALL="curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt-get install -y nodejs"
+    INSTALL_CMD="sudo apt-get install -y -o DPkg::Lock::Timeout=180"
+    UPDATE_CMD="sudo apt-get update -o DPkg::Lock::Timeout=180"
+    NODE_INSTALL="curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt-get install -y -o DPkg::Lock::Timeout=180 nodejs"
 elif command -v dnf >/dev/null; then
-    INSTALL_CMD="sudo dnf install -y -q"
+    INSTALL_CMD="sudo dnf install -y"
     UPDATE_CMD="sudo dnf makecache"
     NODE_INSTALL="sudo dnf install -y nodejs"
 elif command -v yum >/dev/null; then
-    INSTALL_CMD="sudo yum install -y -q"
+    INSTALL_CMD="sudo yum install -y"
     UPDATE_CMD="sudo yum makecache"
     NODE_INSTALL="sudo yum install -y nodejs"
 elif command -v pacman >/dev/null; then
@@ -56,11 +87,15 @@ elif command -v zypper >/dev/null; then
     NODE_INSTALL="sudo zypper install -y nodejs"
 fi
 
-if [ -n "$UPDATE_CMD" ]; then $UPDATE_CMD >/dev/null 2>&1 || true; fi
+wait_for_apt
+if [ -n "$UPDATE_CMD" ]; then
+    echo "  - refreshing package metadata"
+    eval "$UPDATE_CMD" || echo "    package metadata refresh failed, continuing"
+fi
 if [ -n "$INSTALL_CMD" ]; then
-    $INSTALL_CMD curl iproute2 >/dev/null 2>&1 || true
+    run_optional "installing curl and iproute2" $INSTALL_CMD curl iproute2 || true
     # Try multiple fetch alternatives in order of preference
-    $INSTALL_CMD fastfetch >/dev/null 2>&1 || $INSTALL_CMD screenfetch >/dev/null 2>&1 || $INSTALL_CMD neofetch >/dev/null 2>&1 || true
+    run_optional "installing system info helper" $INSTALL_CMD fastfetch || run_optional "installing system info helper fallback" $INSTALL_CMD screenfetch || run_optional "installing system info helper fallback" $INSTALL_CMD neofetch || true
 fi
 
 # 1. Detect OS and Arch
