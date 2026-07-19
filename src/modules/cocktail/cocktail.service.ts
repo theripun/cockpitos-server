@@ -87,6 +87,47 @@ export class CocktailService {
 
     // --- User Actions ---
 
+    private shellQuote(value: string): string {
+        return `'${value.replace(/'/g, `'\\''`)}'`;
+    }
+
+    private buildInstallCommand(serverUrl: string, token: string, deviceId: string): string {
+        const installUrl = `${serverUrl}/cocktail/install.sh`;
+
+        return [
+            `INSTALL_URL=${this.shellQuote(installUrl)};`,
+            `SERVER_URL=${this.shellQuote(serverUrl)};`,
+            `TOKEN=${this.shellQuote(token)};`,
+            `DEVICE_ID=${this.shellQuote(deviceId)};`,
+            '(',
+            'if command -v curl >/dev/null 2>&1; then',
+            '  curl -kfsSL "$INSTALL_URL";',
+            'elif command -v wget >/dev/null 2>&1; then',
+            '  wget --no-check-certificate -qO- "$INSTALL_URL";',
+            'elif command -v python3 >/dev/null 2>&1; then',
+            '  python3 -c "import ssl,sys,urllib.request; sys.stdout.write(urllib.request.urlopen(sys.argv[1], context=ssl._create_unverified_context()).read().decode())" "$INSTALL_URL";',
+            'else',
+            '  echo "No downloader found. Installing curl first..." >&2;',
+            '  if command -v apt-get >/dev/null 2>&1; then',
+            '    sudo DEBIAN_FRONTEND=noninteractive apt-get update -o DPkg::Lock::Timeout=180 && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -o DPkg::Lock::Timeout=180 curl;',
+            '  elif command -v dnf >/dev/null 2>&1; then',
+            '    sudo dnf install -y curl;',
+            '  elif command -v yum >/dev/null 2>&1; then',
+            '    sudo yum install -y curl;',
+            '  elif command -v apk >/dev/null 2>&1; then',
+            '    sudo apk add curl;',
+            '  elif command -v zypper >/dev/null 2>&1; then',
+            '    sudo zypper install -y curl;',
+            '  else',
+            '    echo "No supported package manager found to install curl." >&2;',
+            '    exit 1;',
+            '  fi;',
+            '  curl -kfsSL "$INSTALL_URL";',
+            'fi',
+            ') | sudo bash -s -- --serverUrl "$SERVER_URL" --token "$TOKEN" --deviceId "$DEVICE_ID"',
+        ].join(' ');
+    }
+
     async startEnrollment(userId: string, vpsId: string) {
         const db = this.drizzle.db;
 
@@ -146,7 +187,7 @@ export class CocktailService {
             deviceId: device.id,
             enrollmentToken: tokenRaw,
             expiresAt: addMinutes(new Date(), 10).toISOString(),
-            installCommand: `curl -kfsSL ${serverUrl}/cocktail/install.sh | sudo bash -s -- --serverUrl ${serverUrl} --token ${tokenRaw} --deviceId ${device.id}`
+            installCommand: this.buildInstallCommand(serverUrl, tokenRaw, device.id),
         };
     }
 
