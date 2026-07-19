@@ -20,6 +20,8 @@ npm-debug.log*
 # Build
 build/
 dist/
+!public/cocktail/dist/
+!public/cocktail/dist/index.js
 
 # OS
 .DS_Store
@@ -31,5 +33,4 @@ coverage/
 # Temp files
 *.tmp
 *.temp
-
 
