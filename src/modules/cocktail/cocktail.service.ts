@@ -141,7 +141,7 @@ export class CocktailService {
         });
 
         // 4. Return
-        const serverUrl = process.env.API_PUBLIC_URL || 'https://api.cockpitos.theripun.com';
+        const serverUrl = process.env.API_PUBLIC_URL || 'https://api.cockpit.run';
         return {
             deviceId: device.id,
             enrollmentToken: tokenRaw,
