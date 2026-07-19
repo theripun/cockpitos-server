@@ -51,15 +51,78 @@ wait_for_apt() {
 
     local waited=0
     local lock_files="/var/lib/dpkg/lock-frontend /var/lib/dpkg/lock /var/lib/apt/lists/lock /var/cache/apt/archives/lock"
+    local takeover_after=20
+
+    apt_lock_pids() {
+        sudo fuser $lock_files 2>/dev/null | tr ' ' '\n' | awk '/^[0-9]+$/ { print }' | sort -u
+    }
+
+    repair_dpkg() {
+        echo "  - repairing package database before continuing"
+        sudo dpkg --configure -a
+        sudo apt-get -f install -y -o DPkg::Lock::Timeout=60 >/dev/null 2>&1 || true
+    }
+
+    take_over_apt_locks() {
+        local pids="$1"
+        local pid=""
+        local killed_any=0
+
+        for pid in $pids; do
+            local command_name
+            command_name="$(ps -o comm= -p "$pid" 2>/dev/null | tr -d ' ')"
+
+            case "$command_name" in
+                apt|apt-get|dpkg|unattended-upgr)
+                    echo "  - taking apt priority: stopping $command_name pid $pid"
+                    sudo kill "$pid" >/dev/null 2>&1 || true
+                    killed_any=1
+                    ;;
+                *)
+                    echo "  - apt lock is held by $command_name pid $pid; leaving it alone"
+                    ;;
+            esac
+        done
+
+        if [ "$killed_any" -eq 0 ]; then
+            return 1
+        fi
+
+        sleep 3
+
+        for pid in $pids; do
+            if ps -p "$pid" >/dev/null 2>&1; then
+                local command_name
+                command_name="$(ps -o comm= -p "$pid" 2>/dev/null | tr -d ' ')"
+                case "$command_name" in
+                    apt|apt-get|dpkg|unattended-upgr)
+                        echo "  - force stopping stuck $command_name pid $pid"
+                        sudo kill -9 "$pid" >/dev/null 2>&1 || true
+                        ;;
+                esac
+            fi
+        done
+
+        repair_dpkg
+        return 0
+    }
 
     while sudo fuser $lock_files >/tmp/cocktail-apt-locks 2>/dev/null; do
-        if [ "$waited" -ge 60 ]; then
-            echo "  - apt/dpkg is still busy after 60s."
-            echo "  - lock owner process ids: $(cat /tmp/cocktail-apt-locks 2>/dev/null || echo unknown)"
-            echo "  - wait for Ubuntu unattended upgrades/cloud-init to finish, then click Enroll Again."
+        local pids
+        pids="$(apt_lock_pids)"
+
+        if [ "$waited" -ge "$takeover_after" ]; then
+            echo "  - apt/dpkg still busy after ${takeover_after}s; taking priority for Cockpit install"
+            echo "  - lock owner process ids: ${pids:-unknown}"
+            if take_over_apt_locks "$pids"; then
+                break
+            fi
+
+            echo "  - could not safely clear apt/dpkg lock owners"
             exit 75
         fi
-        echo "  - waiting for apt/dpkg lock... ${waited}s ($(cat /tmp/cocktail-apt-locks 2>/dev/null || echo checking))"
+
+        echo "  - waiting for apt/dpkg lock... ${waited}s (${pids:-checking})"
         sleep 5
         waited=$((waited + 5))
     done
