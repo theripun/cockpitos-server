@@ -50,15 +50,21 @@ wait_for_apt() {
     fi
 
     local waited=0
-    while pgrep -x apt >/dev/null 2>&1 || pgrep -x apt-get >/dev/null 2>&1 || pgrep -x dpkg >/dev/null 2>&1 || pgrep -x unattended-upgr >/dev/null 2>&1; do
-        if [ "$waited" -ge 180 ]; then
-            echo "  - apt/dpkg still locked after 180s; continuing and letting apt report the exact error"
-            return 0
+    local lock_files="/var/lib/dpkg/lock-frontend /var/lib/dpkg/lock /var/lib/apt/lists/lock /var/cache/apt/archives/lock"
+
+    while sudo fuser $lock_files >/tmp/cocktail-apt-locks 2>/dev/null; do
+        if [ "$waited" -ge 60 ]; then
+            echo "  - apt/dpkg is still busy after 60s."
+            echo "  - lock owner process ids: $(cat /tmp/cocktail-apt-locks 2>/dev/null || echo unknown)"
+            echo "  - wait for Ubuntu unattended upgrades/cloud-init to finish, then click Enroll Again."
+            exit 75
         fi
-        echo "  - waiting for apt/dpkg lock... ${waited}s"
+        echo "  - waiting for apt/dpkg lock... ${waited}s ($(cat /tmp/cocktail-apt-locks 2>/dev/null || echo checking))"
         sleep 5
         waited=$((waited + 5))
     done
+
+    rm -f /tmp/cocktail-apt-locks >/dev/null 2>&1 || true
 }
 
 if command -v apt-get >/dev/null; then
