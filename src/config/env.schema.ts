@@ -11,6 +11,7 @@ const baseSchema = z.object({
     SESSION_TTL_SECONDS: z.string().transform(Number).default('604800'),
     COOKIE_SECURE: z.string().transform((val) => val === 'true').default('true'), // Default true for prod
     COOKIE_SAMESITE: z.enum(['lax', 'strict', 'none']).default('lax'),
+    COOKIE_DOMAIN: z.string().optional(),
     RP_NAME: z.string().default('Cockpit Production'),
     RP_ID: z.string().default('cockpit.run'),
     RP_ORIGIN: z.string().url().default('https://cockpit.run'),

@@ -9,6 +9,7 @@ type SameSite = 'lax' | 'strict' | 'none';
 export class CookieService {
     private readonly secure: boolean;
     private readonly sameSite: SameSite;
+    private readonly domain?: string;
     private readonly sessionTtlSeconds: number;
 
     constructor(private readonly configService: ConfigService) {
@@ -16,11 +17,12 @@ export class CookieService {
         const cookieSecure = this.configService.get<boolean | string>('COOKIE_SECURE', false);
         this.secure = cookieSecure === true || cookieSecure === 'true';
         this.sameSite = (envSameSite === 'none' || envSameSite === 'strict' ? envSameSite : 'lax') as SameSite;
+        this.domain = this.configService.get<string>('COOKIE_DOMAIN') || undefined;
         this.sessionTtlSeconds = parseInt(
             this.configService.get<string>('SESSION_TTL_SECONDS', '604800'),
             10,
         );
-        console.log(`[CookieService] Configured: Secure=${this.secure}, SameSite=${this.sameSite}`);
+        console.log(`[CookieService] Configured: Secure=${this.secure}, SameSite=${this.sameSite}, Domain=${this.domain || 'host-only'}`);
     }
 
     setSessionCookie(res: Response, sessionId: string): void {
@@ -28,6 +30,7 @@ export class CookieService {
             httpOnly: true,
             secure: this.secure,
             sameSite: this.sameSite,
+            domain: this.domain,
             path: '/',
             maxAge: this.sessionTtlSeconds * 1000,
         });
@@ -38,6 +41,7 @@ export class CookieService {
             httpOnly: true,
             secure: this.secure,
             sameSite: this.sameSite,
+            domain: this.domain,
             path: '/',
         });
     }
@@ -47,6 +51,7 @@ export class CookieService {
             httpOnly: false, // Client needs to read this for header
             secure: this.secure,
             sameSite: this.sameSite,
+            domain: this.domain,
             path: '/',
             maxAge: this.sessionTtlSeconds * 1000,
         });
@@ -57,6 +62,7 @@ export class CookieService {
             httpOnly: false,
             secure: this.secure,
             sameSite: this.sameSite,
+            domain: this.domain,
             path: '/',
         });
     }

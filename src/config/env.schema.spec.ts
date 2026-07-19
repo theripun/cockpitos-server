@@ -46,4 +46,13 @@ describe('envSchema', () => {
             expect(result.data.CORS_ORIGIN.split(',')).toContain('https://www.cockpit.run');
         }
     });
+
+    it('accepts a shared production cookie domain for cockpit subdomains', () => {
+        const result = envSchema.safeParse({
+            ...validEnv,
+            COOKIE_DOMAIN: '.cockpit.run',
+        });
+
+        expect(result.success).toBe(true);
+    });
 });
