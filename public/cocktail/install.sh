@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+trap 'echo "Error: installer failed at line $LINENO while running: $BASH_COMMAND"' ERR
 
 # Arguments
 SERVER_URL=""
@@ -192,6 +193,7 @@ if ! command -v node >/dev/null; then
   wait_for_apt
   eval "$NODE_INSTALL"
 fi
+echo "Node.js: $(node -v)"
 
 if ! command -v pnpm >/dev/null; then
   if command -v corepack >/dev/null; then
@@ -199,10 +201,11 @@ if ! command -v pnpm >/dev/null; then
     corepack enable
     corepack prepare pnpm@11.7.0 --activate
   else
-    echo "Error: pnpm is required, but corepack is not available to activate it."
-    exit 1
+    echo "Installing pnpm..."
+    npm install -g pnpm@11.7.0
   fi
 fi
+echo "pnpm: $(pnpm -v)"
 
 echo "Detected: $OS / $ARCH"
 
@@ -216,12 +219,15 @@ chmod 700 "$CONFIG_DIR"
 
 # 3. Download Source & Package
 echo "Downloading agent source..."
-curl -ksSL "$SERVER_URL/cocktail/dist/index.js" -o "$INSTALL_DIR/dist/index.js"
-curl -ksSL "$SERVER_URL/cocktail/package.json" -o "$INSTALL_DIR/package.json"
+curl -kfSL "$SERVER_URL/cocktail/dist/index.js" -o "$INSTALL_DIR/dist/index.js"
+curl -kfSL "$SERVER_URL/cocktail/package.json" -o "$INSTALL_DIR/package.json"
+test -s "$INSTALL_DIR/dist/index.js"
+test -s "$INSTALL_DIR/package.json"
+echo "Downloaded agent package."
 
 cd "$INSTALL_DIR"
 echo "Installing dependencies..."
-pnpm install --prod --ignore-scripts --silent
+pnpm install --prod --ignore-scripts
 
 # 4. Create Systemd Service
 SERVICE_FILE="/etc/systemd/system/cocktail.service"
@@ -256,9 +262,10 @@ EOF
 systemctl daemon-reload
 systemctl enable cocktail
 systemctl restart cocktail
+sleep 2
 
 echo "Cocktail Agent installed and started!"
-systemctl status cocktail --no-pager
+systemctl status cocktail --no-pager --lines=20
 
 # Show system info
 if command -v fastfetch >/dev/null; then
