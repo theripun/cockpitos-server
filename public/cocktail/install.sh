@@ -195,17 +195,17 @@ if ! command -v node >/dev/null; then
 fi
 echo "Node.js: $(node -v)"
 
-if ! command -v pnpm >/dev/null; then
-  if command -v corepack >/dev/null; then
-    echo "Activating pnpm..."
-    corepack enable
-    corepack prepare pnpm@11.7.0 --activate
+if ! command -v npm >/dev/null; then
+  echo "Installing npm..."
+  wait_for_apt
+  if [ -n "$INSTALL_CMD" ]; then
+    $INSTALL_CMD npm
   else
-    echo "Installing pnpm..."
-    npm install -g pnpm@11.7.0
+    echo "Error: npm is required but no package installer was detected."
+    exit 1
   fi
 fi
-echo "pnpm: $(pnpm -v)"
+echo "npm: $(npm -v)"
 
 echo "Detected: $OS / $ARCH"
 
@@ -227,7 +227,7 @@ echo "Downloaded agent package."
 
 cd "$INSTALL_DIR"
 echo "Installing dependencies..."
-pnpm install --prod --ignore-scripts
+npm install --omit=dev --ignore-scripts --no-audit --no-fund
 
 # 4. Create Systemd Service
 SERVICE_FILE="/etc/systemd/system/cocktail.service"
